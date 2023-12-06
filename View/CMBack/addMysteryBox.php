@@ -116,7 +116,7 @@ if (
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                             aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Tables</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
+                            <li><i class="fa fa-table"></i><a href="tables-basic.php">Basic Table</a></li>
                             <li><i class="fa fa-table"></i><a href="tables-data.php">Data Table</a></li>
                         </ul>
                     </li>
@@ -428,9 +428,9 @@ if (
         }
 
         // Validate items and sold (only numbers)
-        var itemsSoldPattern = /^\d+$/;
-        if (!itemsSoldPattern.test(items) || !itemsSoldPattern.test(sold)) {
-            alert('Please enter a valid number for items and sold (only numbers allowed).');
+        var itemsSoldPattern =/^[a-zA-Z\s]*$/;
+        if (!itemsSoldPattern.test(items)) {
+            alert('Please enter a valid name for Items(only non-number characters allowed).');
             return false;
         }
 
