@@ -305,7 +305,7 @@ $servicestatusFilter = isset($_GET['servicestatus']) ? $_GET['servicestatus'] : 
 
                     <div class="card">
                                 <div class="card-body">
-                                    <a class="btn btn-primary" href="tables-data.php.php" role="button">view Requests</a>
+                                    <a class="btn btn-primary" href="tables-data.php" role="button">view Requests</a>
                                     
                                     
                                 </div>

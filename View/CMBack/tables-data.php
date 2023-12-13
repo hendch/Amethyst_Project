@@ -10,6 +10,27 @@ $reqtypeFilter = isset($_GET['reqtype']) ? $_GET['reqtype'] : '';
 // Check if a servicestatus filter is set in the URL
 $servicestatusFilter = isset($_GET['servicestatus']) ? $_GET['servicestatus'] : '';
 
+$limit = 5;
+$query = "SELECT count(*) FROM customerservices";
+$db = config::getConnexion();
+$s = $db->query($query);
+$total_results = $s->fetchColumn();
+$total_pages = ceil($total_results / $limit);
+
+if (!isset($_GET['page'])) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
+
+$starting_limit = ($page - 1) * $limit;
+$show = "SELECT * FROM customerservices ORDER BY userid DESC LIMIT :limit OFFSET :offset";
+
+$r = $db->prepare($show);
+$r->bindParam(':limit', $limit, PDO::PARAM_INT);
+$r->bindParam(':offset', $starting_limit, PDO::PARAM_INT);
+$r->execute();
+
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -222,39 +243,67 @@ $servicestatusFilter = isset($_GET['servicestatus']) ? $_GET['servicestatus'] : 
                             </div>
                             <div class="card-body">
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
+                                <form action="" method="GET">
+        <label for="reqtype">Filter by reqtype:</label>
+        <select name="reqtype" id="reqtype">
+            <option value="">All</option>
+            <option value="refund" <?= ($reqtypeFilter === 'refund') ? 'selected' : ''; ?>>Refund</option>
+            <option value="feedback" <?= ($reqtypeFilter === 'feedback') ? 'selected' : ''; ?>>Feedback</option>
+        </select>
+
+        <label for="servicestatus">Filter by servicestatus:</label>
+        <select name="servicestatus" id="servicestatus">
+            <option value="">All</option>
+            <option value="completed" <?= ($servicestatusFilter === 'completed') ? 'selected' : ''; ?>>Completed</option>
+            <option value="ongoing" <?= ($servicestatusFilter === 'ongoing') ? 'selected' : ''; ?>>Ongoing</option>
+            <option value="cancelled" <?= ($servicestatusFilter === 'cancelled') ? 'selected' : ''; ?>>Cancelled</option>
+        </select>
+
+        <input type="submit" value="Apply Filter">
+    </form>
                                 <center>
                                     <thead>
                                         <tr>
-                                            <th>userid</th>
-                                            <th>reqtype</th>
-                                            <th>reqdate</th>
-                                            <th>servicestatus</th>
+                                            <th scope="col">userid</th>
+                                            <th scope="col">reqtype</th>
+                                            <th scope="col">reqdate</th>
+                                            <th scope="col">servicestatus</th>
+                                            
                                         </tr>
                                     </thead>
                                     <tbody>
                                     <?php
-                                            foreach ($tab as $customerservice) {
-                                                // Apply the reqtype and servicestatus filters
-                                                if (
-                                                    ($reqtypeFilter === '' || $customerservice['reqtype'] === $reqtypeFilter) &&
-                                                    ($servicestatusFilter === '' || $customerservice['servicestatus'] === $servicestatusFilter)
-                                                ) {
-                                        ?>
-                                                <tr>
-                                                    <td><?= $customerservice['userid']; ?></td>
-                                                    <td><?= $customerservice['reqtype']; ?></td>
-                                                    <td><?= $customerservice['reqdate']; ?></td>
-                                                    <td><?= $customerservice['servicestatus']; ?></td>
-                                                    <td><a href="updaterequest.php?updateuserid=<?= $customerservice['userid']; ?>" class="update-btn">Update</a></td>
-                                                    <td><a class="btn btn-primary" href="delete_request.php?deleteuserid=<?= $customerservice['userid']; ?>" class="delete-btn">Delete</a></td>
+                                    while ($res = $r->fetch(PDO::FETCH_ASSOC)) {    
+                                    foreach ($tab as $customerservice) {
+                                        // Apply the reqtype and servicestatus filters
+                                        if (
+                                            ($reqtypeFilter === '' || $customerservice['reqtype'] === $reqtypeFilter) &&
+                                            ($servicestatusFilter === '' || $customerservice['servicestatus'] === $servicestatusFilter)
+                                        ) {
+                                ?>
+                                        <tr>
+                                            <td><?= $customerservice['userid']; ?></td>
+                                            <td><?= $customerservice['reqtype']; ?></td>
+                                            <td><?= $customerservice['reqdate']; ?></td>
+                                            <td><?= $customerservice['servicestatus']; ?></td>
+                                            <td><a class="btn btn-primary" href="updaterequest.php?updateuserid=<?= $customerservice['userid']; ?>" class="update-btn">Update</a></td>
+                                            <td><a class="btn btn-primary" href="delete_request.php?deleteuserid=<?= $customerservice['userid']; ?>" class="delete-btn">Delete</a></td>
 
-                                                </tr>
-                                        <?php
-                                                }
-                                            }
-                                        ?>
+                                        </tr>
+                                <?php
+                                        }
+                                    }
+                                }
+                                ?>
                                     </tbody>
                                 </table>
+                                <div class="pagination">
+                                <?php
+for ($i = 1; $i <= $total_pages; $i++) {
+    echo '<a href="?page=' . $i . '" class="links">' . $i . '</a>';
+}
+?>
+                                </div>  
                             </div>
                         </div>
                     </div>
