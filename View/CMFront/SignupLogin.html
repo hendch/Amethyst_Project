@@ -1,0 +1,67 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joueur </title>
+</head>
+
+<body>
+    <a href="listrequest.php">Back to list </a>
+    <hr>
+
+    <div id="error">
+        <?php echo $error; ?>
+    </div>
+
+    <form action="" method="POST">
+        <table>
+            <tr>
+                <td><label for="Firstname">First Name :</label></td>
+                <td>
+                    <input type="text" id="Fname" Firstname="Fname" />
+                    <span id="error" style="color: red"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="Lastname">Last Name :</label></td>
+                <td>
+                    <input type="text" id="Lname" name="Lname" />
+                    <span id="error" style="color: red"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="Email">Email :</label></td>
+                <td>
+                    <input type="text" id="email" name="email" />
+                    <span id="error" style="color: red"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="PhoneNumber">Phone Number :</label></td>
+                <td>
+                    <input type="text" id="phone" name="phone" />
+                    <span id="error" style="color: red"></span>
+                </td>
+            </tr>
+            <tr>
+                <td><label for="UserName">UserName :</label></td>
+                <td>
+                    <input type="text" id="username" name="username" />
+                    <span id="error" style="color: red"></span>
+                </td>
+            </tr>
+
+
+            <td>
+                <input type="submit" value="Save">
+            </td>
+            <td>
+                <input type="reset" value="Reset">
+            </td>
+        </table>
+
+    </form>
+</body>
+
+</html>

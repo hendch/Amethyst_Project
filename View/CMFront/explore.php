@@ -134,7 +134,7 @@ https://templatemo.com/tm-577-liberty-market
               <li><a href="explore.php" class="active">Explore</a></li>
               <li><a href="details.html">Item Details</a></li>
               <li><a href="author.html">Author</a></li>
-              <li><a href="create.php">Create Yours</a></li>
+              <li><a href="request.php">Customer service</a></li>
             </ul>
             <a class='menu-trigger'>
               <span>Menu</span>

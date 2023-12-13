@@ -1,6 +1,6 @@
 <?php
 session_start();
-include '../../Controller/ThreadController.php';
+include '../../Controller/threadController.php';
 include_once '../../Model/threadModel.php';
 $threadController = new ThreadController();
 $threads = $threadController->getAllThreads();
