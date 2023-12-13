@@ -1,20 +1,16 @@
 <?php
 class category {
-    private string $catid;
+    private ?int $catid=null;
     private string $abbr;
     private string $catname;
-    public function __construct(string $catid, string $abbr, string $catname){
-        $this->catid=$catid;
+    public function __construct(string $abbr, string $catname){
+        $this->catid=null;
         $this->abbr=$abbr;
         $this->catname=$catname;
     }
     public function getcatid()
     {
         return $this->catid;
-    }
-    public function setcatid($catid)
-    {
-        return $this->catid=$catid;   
     }
     public function getabbr()
     {
