@@ -1,10 +1,19 @@
 <?php
 
-require '../config.php';
+require '../../config.php';
 
 class categoryC
 {
-
+    public function listproducts($catid) {
+        try {
+            $pdo = config::getConnexion();
+            $query = $pdo->prepare("SELECT * FROM product WHERE category = :id");
+            $query->execute(['id' => $catid]);
+            return $query->fetchAll();
+        } catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
     public function listcategory()
     {
         $sql = "SELECT * FROM category";
