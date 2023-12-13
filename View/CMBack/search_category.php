@@ -1,4 +1,18 @@
+<?php
+require_once "../controller/categorycontrol.php";
 
+$categoryC = new categoryC();
+
+// Traitement du formulaire
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['category']) && isset($_POST['search'])) {
+        $catid = $_POST['category'];
+        $list = $categoryC->listproducts($catid);
+    }
+}
+
+$category = $categoryC->listcategory();
+?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -289,29 +303,41 @@ table, th, td {
                             </div> <!-- .buttons -->
                             <div class="card">
                                 <div class="card-body">
-                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
- 
+                                
+                                    <form action="" method="POST">
+                                        <label for="category">select a category :</label>
+                                        <select name="category" id="category">
+                                            <?php
+                                            foreach ($category as $category) {
+                                                echo '<option value="' . $category['catid'] . '">' . $category['catname'] . '</option>';
+                                            }
+                                            ?>
+                                        </select>
+                                        <input type="submit" value="search" name="search">
+                                    </form>
+
+                                    <?php if (isset($list)) { ?>
+                                        <br>
+                                        <h3>list of products :</h3>
+                                        <ul>
+                                            <?php foreach ($list as $product) { ?>
+                                                <li><?= $product['name'] ?> - <?= $product['price'] ?> dt</li>
+                                            <?php } ?>
+                                        </ul>
+                                    <?php } ?>
                                 </div>
                                 
 
                                
                             </div>
-                            <div class="heading">
-      <h4>List of Products
-        <form class="filterForm" method="POST" action="sort.php">
-          <input type="text" id="filter" name="filter" autofocus="true" placeholder="filter keyword" tabindex="0" value="<?= $filter ?? '' ?>"/>
-          <input type="submit" name="btnFilter" id="btnFilter" value="Go"/>
-          <input type="submit" name="btnClear" id="btnClear" value="Clear Filters"/>
-        </form>
-      </h4>
-    </div>
+
                         </div><!-- .row -->
                     </div><!-- .animated -->
                 </div><!-- .content -->
 
 
             </div><!-- /#right-panel -->
-           
+
             <!-- Right Panel -->
             
 
@@ -320,6 +346,10 @@ table, th, td {
             <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
             <script src="assets/js/main.js"></script>
 
+
+</body>
+
+</html>
 
 </body>
 

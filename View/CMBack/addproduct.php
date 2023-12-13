@@ -3,57 +3,91 @@
 include '../model/product.php';
 include '../controller/productcontrol.php';
 
-$error = "";
+
+/*$error = "";
 $product = null;
 $valid = 0;
 $productC = new productC();
+
 if (
-    isset($_POST["id"]) &&
+   
     isset($_POST["name"]) &&
         isset($_POST["price"]) &&
         isset($_POST["quantity"]) &&
         isset($_POST["category"]) &&
         isset($_POST["region"]) &&
-        isset($_POST["description"]) )
+        isset($_POST["description"]) &&
+        isset($_POST["img"]))
  {
     if (
-        !empty($_POST["id"]) &&
+        
         !empty($_POST["name"]) &&
             !empty($_POST["price"]) &&
             !empty($_POST["quantity"]) &&
             !empty($_POST["category"]) &&
             !empty($_POST["region"]) &&
-            !empty($_POST["description"])
+            !empty($_POST["description"])&&
+            !empty($_POST["img"])
     ) {
-        
-
-        
+       
             $valid = 1; // Form validation passed
-        
-    } else {
+       // }
+    }
+    else {
         $error = "Missing information";
     }
 }
 
 if ($valid == 1) {
     // Form is valid, proceed with adding the user
+    $cat=(int)$_POST["category"];
     $product = new product(
-        $_POST["id"],
         $_POST["name"], 
         $_POST["price"], 
         $_POST["quantity"], 
-        $_POST["category"], 
+        $cat, 
         $_POST["region"], 
-        $_POST["description"]);
+        $_POST["description"],
+        $_POST["img"]
+    );
     
     $productC->addproduct($product);
     header('Location:productlist.php');
     exit;
-} 
+}*/
+if(isset($_POST['submit'])){
+    $name=$_POST['name'];
+    $price=$_POST['price'];
+    $quantity=$_POST['quantity'];
+    $category=$_POST['category'];
+    $region=$_POST['region'];
+    $description=$_POST['description'];
+    $img=$_FILES['file'];
+    
+    $imagefilename=$img['name'];
+    $imagefileerror=$img['error'];
+    $imagefiletemp=$img['tmp_name'];
+    $filename_seperate=explode('.',$imagefilename);
+    $file_extension=strtolower($filename_seperate[1]);
+    $extension=array('jpeg','jpg','png');
+    if(in_array($file_extension,$extension)){
+        $upload_image='uploads/'.$imagefilename;
+        move_uploaded_file($imagefiletemp,$upload_image);
+        $sql="insert into `product` (name,price,quantity,category,region,description,img) values ('$name','$price','$quantity','$category','$region','$description','$upload_image')";
+        $pdo = config::getConnexion();
+        $stmt = $pdo->query($sql);
+        $stmt->execute();
+        if($stmt){
+            header('Location:productlist.php');
+        }
+    }
 
+
+}
 
 
 ?>
+
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -327,52 +361,60 @@ table, th, td {
                                
                             </div>
                             <div class="container">
-                            <form  method="post" >
-    <!-- Price Input -->
-    <label for="id">id:</label>
-    <input type="text" id="id" name="id" placeholder="Enter id" required>
+                                <form  method="post" enctype="multipart/form-data">
+                                    <!-- name Input -->
+                                    <label for="name">name:</label>
+                                    <input type="text" id="name" name="name" placeholder="Enter name" required>
 
-   
-    <br>
-    <!-- name Input -->
-    <label for="name">name:</label>
-    <input type="text" id="name" name="name" placeholder="Enter name" required>
+                                    <br>
+                                    <label for="price">Price:</label>
+                                    <input type="number" id="price" name="price" placeholder="Enter price" required>
 
-    <br>
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" placeholder="Enter price" required>
-
-    <br>
+                                    <br>
 
 
-    <!-- Quantity Input -->
-    <label for="quantity">Quantity:</label>
-    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
+                                    <!-- Quantity Input -->
+                                    <label for="quantity">Quantity:</label>
+                                    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" required>
 
-    <br>
+                                    <br>
 
-    <!-- Category Input -->
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category" placeholder="Enter category" required>
+                                    <!-- Category Input
+                                    <label for="category">Category:</label>
+                                    <input type="text" id="category" name="category" placeholder="Enter category" required> -->
+                                    <?php
+                                        $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+                                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    <br>
+                                        $query = "SELECT * FROM category";
+                                        $result = $pdo->query($query);
+                                        $tab = $result->fetchAll();
+                                    ?>
+                                    <select id="category" name="category">
+                                        <option value="Category">Category</option>
+                                        <?php foreach ($tab as $category): ?>
+                                            <option value="<?php echo $category["catid"]; ?>"><?php echo $category["catname"]; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
 
-    <!-- Region Input -->
-    <label for="region">Region:</label>
-    <input type="text" id="region" name="region" placeholder="Enter region" required>
+                                    <br>
 
-    <br>
-    <!-- description Input -->
-    <label for="description">description:</label>
-    <input type="text" id="description" name="description" placeholder="Enter description" required>
+                                    <!-- Region Input -->
+                                    <label for="region">Region:</label>
+                                    <input type="text" id="region" name="region" placeholder="Enter region" required>
 
-   
-
-
-    <!-- Submit Button -->
-    <button type="submit" class ="btn btn-primary">add </button>
-  </form>
-</div>
+                                    <br>
+                                    <!-- description Input -->
+                                    <label for="description">description:</label>
+                                    <input type="text" id="description" name="description" placeholder="Enter description" required>
+                                    <br>
+                                    <label>product picture</label>
+                                    <input type="file" name="file" class="form-control" required="" accept="*/image">
+                                    <br>
+                                    <!-- Submit Button -->
+                                    <button type="submit" class ="btn btn-primary" name="submit">submit </button>
+                                </form>
+                            </div>
                           
                            
                             <div class="col-md-6">
@@ -383,11 +425,20 @@ table, th, td {
                                     </div>
                                     <div class="card-body">
                                         <button type="button" class="btn btn-outline-primary">add category</button>
-                                        <button type="button" class="btn btn-outline-secondary">delete category</button>
+                                        <button type="button" class="btn btn-outline-secondary">view category</button>
                                        
                                     </div>
                                 </div>
+                                <div class="card">
+                                <div class="card-body">
+                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
+ 
+                                </div>
+                                
 
+                               
+                            </div>
+                                
 
                                 
                                 </div>
@@ -407,6 +458,31 @@ table, th, td {
             <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
             <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
             <script src="assets/js/main.js"></script>
+            <script defer>
+                function validateaddForm() {
+                var id1 = document.getElementById('id').value;
+                var name1 = document.getElementById('name').value;
+                var price1 = document.getElementById('price').value;
+                var quantity1 = document.getElementById('quantity').value;
+                var category1 = document.getElementById('category').value;
+                var region1 = document.getElementById('region').value;
+                var description1 = document.getElementById('description').value;
+                var textPattern = /^[A-Za-z]+$/;
+                var nbPattern = /^[0-9][0-9][0-9][0-9][0-9]?$/;
+
+            
+                if (!textPattern.test(name) || !textPattern.test(region) || !textPattern.test(description)) {
+                    alert('Invalid text format.  should contain only letters.');
+                    return false;
+                }
+
+                if (!nbPattern.test(price) ||!nbPattern.test(quantity) ) {
+                    alert('Invalid number. ');
+                    return false;
+                }
+                return true;
+         }
+            </script>
 
 
 </body>

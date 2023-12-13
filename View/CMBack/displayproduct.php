@@ -10,6 +10,11 @@ $tab = $c->listproducts();
 <!--[if gt IE 8]><!-->
 <html class="no-js" lang="en">
 <!--<![endif]-->
+<style>
+    img{
+        width: 200px;
+    }
+</style>
 
 <head>
     <meta charset="utf-8">
@@ -268,46 +273,93 @@ table, th, td {
                                 <div class="card-body">
                                     <a class="btn btn-primary" href="addproduct.php" role="button">add product</a>
                                     <a class="btn btn-primary" href="displayproduct.php" role="button">view product</a>
-                                   
-                                    
                                 </div>
-                                
-
-                               
                             </div>
-                            <table class="table" >
+                            <?php
+$limit = 5;
+$query = "SELECT count(*) FROM product";
+$db = config::getConnexion();
+$s = $db->query($query);
+$total_results = $s->fetchColumn();
+$total_pages = ceil($total_results / $limit);
+
+if (!isset($_GET['page'])) {
+    $page = 1;
+} else {
+    $page = $_GET['page'];
+}
+
+$starting_limit = ($page - 1) * $limit;
+$show = "SELECT * FROM product ORDER BY id ASC LIMIT :limit OFFSET :offset";
+
+$r = $db->prepare($show);
+$r->bindParam(':limit', $limit, PDO::PARAM_INT);
+$r->bindParam(':offset', $starting_limit, PDO::PARAM_INT);
+$r->execute();
+
+?>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">name</th>
+            <th scope="col">price</th>
+            <th scope="col">quantity</th>
+            <th scope="col">category</th>
+            <th scope="col">region</th>
+            <th scope="col">description</th>
+            <th scope="col">product image</th>
+            <th scope="col">operation</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        while ($res = $r->fetch(PDO::FETCH_ASSOC)) {
+            echo '<tr>
+                <td>' . $res['id'] . '</td>
+                <td>' . $res['name'] . '</td>
+                <td>' . $res['price'] . '</td>
+                <td>' . $res['quantity'] . '</td>
+                <td>' . $res['category'] . '</td>
+                <td>' . $res['region'] . '</td>
+                <td>' . $res['description'] . '</td>
+                <td> <img src='.$res['img'].' > </td>
+                <td>
+                    <button class="btn btn-primary"><a href="update.php?updateid=' . $res['id'] . '" class="text-light">Update</a></button>
+                    <button class="btn btn-danger"><a href="delete.php?deleteid=' . $res['id'] . '" class="text-light">Delete</a></button>
+                
+                </td>
+            </tr>';
+        }
+        ?>
+    </tbody>
+</table>
+
+<?php
+for ($i = 1; $i <= $total_pages; $i++) {
+    echo '<a href="?page=' . $i . '" class="links">' . $i . '</a>';
+}
+?>
+
+                            <!-- <table class="table" >
                                 <thead>
                                     <tr>
                                     <th scope="col">id</th>
+                                    
                                     <th scope="col">name</th>
                                     <th scope="col">price</th>
                                     <th scope="col">quantity</th>
                                     <th scope="col">category</th>
                                     <th scope="col">region</th>
                                     <th scope="col">description</th>
+                                    
                                     <th scope="col">operation</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                <?php
-                                    foreach ($tab as $product) {
-                                        echo '<tr>
-                                            <td>'.$product['id'].'</td>
-                                            <td>'.$product['name'].'</td>
-                                            <td>'.$product['price'].'</td>
-                                            <td>'.$product['quantity'].'</td>
-                                            <td>'.$product['category'].'</td>
-                                            <td>'.$product['region'].'</td>
-                                            <td>'.$product['description'].'</td>
-                                            <td>
-                                                <button class="btn btn-primary"><a href="update.php?updateid='.$product['id'].'" class="text-light">Update</a></button>
-                                                <button class="btn btn-danger"><a href="delete.php?deleteid='.$product['id'].'" class="text-light">Delete</a></button>
-                                            </td>
-                                        </tr>';
-                                    }
-                                ?>
-                                </tbody>
-                            </table>
+                                
+                            </table> -->
 
                           
                            
@@ -318,15 +370,23 @@ table, th, td {
                                         <strong>CATEGORY </strong>
                                     </div>
                                     <div class="card-body">
-                                        <button type="button" class="btn btn-outline-primary">add category</button>
-                                        <button type="button" class="btn btn-outline-secondary">delete category</button>
-                                       
+                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
+                                        <a href="../../Back_Template/view/displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
                                     </div>
                                 </div>
 
 
-                                
+                                <div class="card">
+                                    <div class="card-body">
+                                        <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
+                                    </div>
+ 
                                 </div>
+                                
+
+                               
+                            </div>
+                                
                             </div> <!-- .buttons -->
 
                         </div><!-- .row -->

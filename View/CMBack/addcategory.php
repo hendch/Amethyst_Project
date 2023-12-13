@@ -8,23 +8,18 @@ $category = null;
 $valid = 0;
 $categoryC = new categoryC();
 if (
-    isset($_POST["catid"]) &&
     isset($_POST["abbr"]) &&
-        isset($_POST["catname"]) 
-         )
- {
+    isset($_POST["catname"]) 
+  ) {
     if (
-        !empty($_POST["catid"]) &&
         !empty($_POST["abbr"]) &&
-            !empty($_POST["catname"])
-           
-    ) {
-        
-
-        
+        !empty($_POST["catname"]) 
+    ) { 
             $valid = 1; // Form validation passed
         
-    } else {
+    }
+        
+     else {
         $error = "Missing information";
     }
 }
@@ -32,12 +27,11 @@ if (
 if ($valid == 1) {
     // Form is valid, proceed with adding the user
     $category = new category(
-        $_POST["catid"],
         $_POST["abbr"], 
         $_POST["catname"]);
     
     $categoryC->addcategory($category);
-    header('Location:displaycategory.php');
+    header('Location:productlist.php');
     exit;
 } 
 
@@ -303,31 +297,19 @@ table, th, td {
                                     </tr>
                                   </table>
                             </div> -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <a class="btn btn-primary" href="addproduct.php" role="button">add product</a>
+                                    <a class="btn btn-primary" href="displayproduct.php" role="button">view product</a>
+                                    
+                                    
+                                </div>
+                                
 
+                               
+                            </div>
 
                            
-                            <div class="container">
-                            <form  method="post" >
-    <!-- Price Input -->
-    <label for="catid">category id:</label>
-    <input type="text" id="catid" name="catid" placeholder="Enter category id" required>
-
-   
-    <br>
-    <!-- name Input -->
-    <label for="abbr">abbreviation:</label>
-    <input type="text" id="abbr" name="abbr" placeholder="Enter abbreviation" required>
-
-    <br>
-    <label for="catname">category name:</label>
-    <input type="text" id="catname" name="catname" placeholder="Enter category name" required>
-
-    <br>
-
-    <!-- Submit Button -->
-    <button type="submit" class ="btn btn-primary">add </button>
-  </form>
-</div>
                           
                            
                             <div class="col-md-6">
@@ -337,16 +319,42 @@ table, th, td {
                                         <strong>CATEGORY </strong>
                                     </div>
                                     <div class="card-body">
-                                        <button type="button" class="btn btn-outline-primary">add category</button>
-                                        <button type="button" class="btn btn-outline-secondary">delete category</button>
-                                       
+                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
+                                        <a href="../../Back_Template/view/displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
                                     </div>
                                 </div>
 
+                                <div class="container">
+                                    <form  method="post" >
+                                        <!-- Price Input -->
+                                        
+                                        <!-- name Input -->
+                                        <label for="abbr">abbreviation:</label>
+                                        <input type="text" id="abbr" name="abbr" placeholder="Enter abbreviation" required>
 
-                                
+                                        <br>
+                                        <label for="catname">category name:</label>
+                                        <input type="text" id="catname" name="catname" placeholder="Enter category name" required>
+
+                                        <br>
+
+                                        <!-- Submit Button -->
+                                        <button type="submit" class ="btn btn-primary">add </button>
+                                    </form>
                                 </div>
+                                <div class="card">
+                                <div class="card-body">
+                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
+ 
+                                </div>
+                                
+
+                               
+                            </div>
+                                
                             </div> <!-- .buttons -->
+                            
+                            
 
                         </div><!-- .row -->
                     </div><!-- .animated -->
@@ -362,8 +370,6 @@ table, th, td {
             <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
             <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
             <script src="assets/js/main.js"></script>
-
-
 </body>
 
 </html>
