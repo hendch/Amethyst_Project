@@ -16,6 +16,18 @@ class requestcontroller
         }
     }
 
+    /*public function listrequest()
+    {
+        $db = config::getConnexion();
+        $sql = "SELECT * FROM customerservices";
+        try {
+            $list = $db->query($sql);
+            return $list;
+        } catch (Exception $e) {
+            die('Error:' . $e->getMessage());
+        }
+    }*/
+
     function showrequests($userid)
     {
         $sql = "SELECT * from customerservices where userid = $userid";
@@ -41,7 +53,7 @@ class requestcontroller
                 'userid' => $request->getuserid(),
                 'reqtype' => $request->getreqtype(),
                 'reqdate' => $request->getreqdate(),
-                'servicestatus' => $request->getservicestatus()
+                'servicestatus' => $request->getservicestatus(),
             ]);
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
@@ -69,7 +81,7 @@ class requestcontroller
                 'UPDATE customerservices SET
                     reqtype = :reqtype, 
                     reqdate = :reqdate,
-                    servicestatus = :servicestatus 
+                    servicestatus = :servicestatus
                 WHERE userid = :userid'
             );
     
@@ -85,6 +97,14 @@ class requestcontroller
             echo 'Error: ' . $e->getMessage();
         }
     }
-    
+
+    public function pagination(){
+        $page = isset($_GET['page']) ? (int)$_GET['page'] :1;
+        $perpage = isset($_GET['perpage']) ? (int)$_GET['perpage'] :3;
+        $db=config::getConnexion();
+        $customerservices=$db->prepare("SELECT userid, reqtype, reqdate, servicestatus FROM customerservices LIMIT 0,5");
+        $customerservices=execute();
+        $customerservices=$customerservices->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 ?>
