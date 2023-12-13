@@ -1,4 +1,41 @@
-
+<?php
+include '../controller/blog.php';
+include '../model/blogM.php';
+$error = "";
+    $blogid= $_GET['updateid'];
+    // create an instance of the controller
+    $blogs = new blogs();
+    $blogM= $blogs->showblog($blogid);
+    $valid=0;
+    if (isset($_POST["blogid"]) &&
+        isset($_POST["postcat"]) &&
+        isset($_POST["blogtitle"]) &&
+        isset($_POST["descriptionb"])){
+        if (
+            !empty($_POST["blogid"]) &&
+            !empty($_POST["postcat"]) &&
+            !empty($_POST["blogtitle"]) &&
+            !empty($_POST["descriptionb"]) 
+        ) {
+            
+                $valid = 1; // Form validation passed
+            
+        } else{
+            $error = "Missing information";
+        }
+    } 
+    if ($valid==1){
+        $blogM = new blogM(
+            $id,
+            $_POST["blogid"], 
+            $_POST["postcat"], 
+            $_POST["blogtitle"], 
+            $_POST["descriptionb"];
+        $blog->updateblog($blogM,$blogid);
+        header('Location:listblog.php');
+        exit;
+    }
+?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -60,16 +97,16 @@ table, th, td {
                     </li>
                     <h3 class="menu-title">UI elements</h3><!-- /.menu-title -->
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>PRODUCTS</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>BLOGS</a>
                         <ul class="sub-menu children active dropdown-menu">
-                            <li><i class="fa fa-puzzle-piece"></i><a href="productlist.php">product list</a></li>
+                            <li><i class="fa fa-puzzle-piece"></i><a href="productlist.php">blog list</a></li>
             
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>AUCTIONED PRODUCTS</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>LIST BLOGS</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-puzzle-piece"></i><a href=tables-basic.html">product list</a></li>
+                            <li><i class="fa fa-puzzle-piece"></i><a href=tables-basic.html">blog list</a></li>
                             
                         </ul>
                     </li>
@@ -226,44 +263,46 @@ table, th, td {
                         <ol class="breadcrumb text-right">
                             <li><a href="#">Dashboard</a></li>
                             <li><a href="#">UI Elements</a></li>
-                            <li class="active">PRODUCTS</li>
+                            <li class="active">BLOGS</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="container">
+        <form  method="post">
+<br>
+<!-- Category Input -->
+<label for="prodcat">blog category:</label>
+<input type="text" id="prodcat" name="prodcat" value="<?php echo $blog['prodcat'] ;?>" >
 
+<br>        
+
+ <br>
+<label for="description">description:</label>
+<input type="text" id="description" name="description" value="<?php echo $blog['description'] ;?>" >
+
+<br>
+<!-- Price Input -->
+<label for="price">Price:</label>
+<input type="number" id="price" name="price" value ="<?php echo $blog['price'] ;?>" >
+
+<!-- Submit Button -->
+<input type="submit" value="update">
+</form>
+</div>
        <!-- <div class="content mt-3">
             <div class="animated fadeIn">
                 <div class="row">
 
                     <div class="buttons">
 
-                       
-                        <div class="col-md-6">
-
-                            <div class="card">
-                                <table>
-                                    <tr>
-                                      <td rowspan="6", style="height: 200px"><img src="img_girl.jpg" alt="painting"></td>
-         
-                                      <td>category</td>
-                                      <td>price</td>
-                                      <td>description</td>
-                                    </tr>
-                                    <tr>
-                                      <td>painting</td>
-                                      <td>300dt</td>
-                                      <td>oil painting</td>
-                                    </tr>
-                                  </table>
-                            </div> -->
-
+                    
 
                             <div class="card">
                                 <div class="card-body">
-                                    <a class="btn btn-primary" href="addproduct.php" role="button">add product</a>
-                                    <a class="btn btn-primary" href="displayproduct.php" role="button">view product</a>
+                                    <a class="btn btn-primary" href="addblog.php" role="button">add blog</a>
+                                    <a class="btn btn-primary" href="listblog.php" role="button">view blog</a>
                                     
                                     
                                 </div>
@@ -281,37 +320,24 @@ table, th, td {
                                         <strong>CATEGORY </strong>
                                     </div>
                                     <div class="card-body">
-                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
-                                        <a href="../../Back_Template\view\displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
+                                        <button type="button" class="btn btn-outline-primary">add category</button>
+                                        <button type="button" class="btn btn-outline-secondary">delete category</button>
+                                       
                                     </div>
                                 </div>
 
-                            </div> <!-- .buttons -->
-                            <div class="card">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
- 
-                                </div>
-                                
 
-                               
-                            </div>
-                            <div class="heading">
-      <h4>List of Products
-        <form class="filterForm" method="POST" action="sort.php">
-          <input type="text" id="filter" name="filter" autofocus="true" placeholder="filter keyword" tabindex="0" value="<?= $filter ?? '' ?>"/>
-          <input type="submit" name="btnFilter" id="btnFilter" value="Go"/>
-          <input type="submit" name="btnClear" id="btnClear" value="Clear Filters"/>
-        </form>
-      </h4>
-    </div>
+                                
+                                </div>
+                            </div> <!-- .buttons -->
+
                         </div><!-- .row -->
                     </div><!-- .animated -->
                 </div><!-- .content -->
 
 
             </div><!-- /#right-panel -->
-           
+
             <!-- Right Panel -->
             
 

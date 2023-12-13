@@ -1,30 +1,29 @@
 <?php
 class product {
-    private string $id;
+    private ?int $id=null;
     private string $name;
-    private int $quantity;
     private int $price;
-    private string $category;
+    private int $quantity;
+    private int $category;
     private string $region;
     private string $description;
-    public function __construct(string $id, string $name, int $quantity, int $price, string $category, string $region, string $description )
+    private ?string $img=null;
+    public function __construct( string $name, int $price, int $quantity, int $category, string $region, string $description,string $img )
     {
         $this->id=null;
         $this->name=$name;
-        $this->quantity=$q;
-        $this->price=$p;
-        $this->$category=$cat;
-        $this->$region=$r;
+        $this->price=$price;
+        $this->quantity=$quantity;
+        $this->category=$category;
+        $this->region=$region;
         $this->description=$description;
+        $this->img=$img;
     }
     public function getid()
     {
         return $this->id;
     }
-    public function setid($id)
-    {
-        return $this->id=$id;   
-    }
+    
     public function getname()
     {
         return $this->name;
@@ -72,5 +71,13 @@ class product {
     public function setdescription($description)
     {
         return $this->description=$description;   
+    }
+    public function getimg()
+    {
+        return $this->img;
+    }
+    public function setimg($img)
+    {
+        return $this->img=$img;   
     }
 }

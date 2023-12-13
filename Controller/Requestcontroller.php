@@ -17,6 +17,18 @@ class requestcontroller
         }
     }
 
+    /*public function listrequest()
+    {
+        $db = config::getConnexion();
+        $sql = "SELECT * FROM customerservices";
+        try {
+            $list = $db->query($sql);
+            return $list;
+        } catch (Exception $e) {
+            die('Error:' . $e->getMessage());
+        }
+    }*/
+
     function showrequests($userid)
     {
         $sql = "SELECT * from requests where userid = $userid";
@@ -32,6 +44,7 @@ class requestcontroller
     }
 
     public function createrequest($request)
+<<<<<<< HEAD
 {
     $sql = "INSERT INTO requests (userid, reqtype, reqdate, servicestatus) 
             VALUES (:userid, :reqtype, :reqdate, :servicestatus)";
@@ -49,6 +62,22 @@ class requestcontroller
             echo 'Request added successfully'; // Optional message indicating successful insertion
         } else {
             echo 'Error: Failed to add request'; // Error message for failed insertion
+=======
+    {
+        $sql = "INSERT INTO customerservices (userid, reqtype, reqdate, servicestatus) 
+        VALUES (:userid, :reqtype, :reqdate, :servicestatus)";
+        $db = config::getConnexion();
+        try {
+            $query = $db->prepare($sql);
+            $query->execute([
+                'userid' => $request->getuserid(),
+                'reqtype' => $request->getreqtype(),
+                'reqdate' => $request->getreqdate(),
+                'servicestatus' => $request->getservicestatus(),
+            ]);
+        } catch (Exception $e) {
+            echo 'Error: ' . $e->getMessage();
+>>>>>>> dec5554de1f437b414be2187aad53904b16b7634
         }
     } catch (PDOException $e) {
         echo 'Error: ' . $e->getMessage(); // Output error message if an exception occurs
@@ -77,7 +106,7 @@ class requestcontroller
                 'UPDATE requests SET
                     reqtype = :reqtype, 
                     reqdate = :reqdate,
-                    servicestatus = :servicestatus 
+                    servicestatus = :servicestatus
                 WHERE userid = :userid'
             );
 
@@ -94,5 +123,16 @@ class requestcontroller
         }
     }
 
+<<<<<<< HEAD
+=======
+    public function pagination(){
+        $page = isset($_GET['page']) ? (int)$_GET['page'] :1;
+        $perpage = isset($_GET['perpage']) ? (int)$_GET['perpage'] :3;
+        $db=config::getConnexion();
+        $customerservices=$db->prepare("SELECT userid, reqtype, reqdate, servicestatus FROM customerservices LIMIT 0,5");
+        $customerservices=execute();
+        $customerservices=$customerservices->fetchAll(PDO::FETCH_ASSOC);
+    }
+>>>>>>> dec5554de1f437b414be2187aad53904b16b7634
 }
 ?>

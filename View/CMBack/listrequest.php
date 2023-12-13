@@ -1,4 +1,3 @@
-
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8" lang=""> <![endif]-->
@@ -23,21 +22,13 @@
     <link rel="stylesheet" href="vendors/themify-icons/css/themify-icons.css">
     <link rel="stylesheet" href="vendors/flag-icon-css/css/flag-icon.min.css">
     <link rel="stylesheet" href="vendors/selectFX/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="vendors/datatables.net-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="vendors/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css">
 
     <link rel="stylesheet" href="assets/css/style.css">
 
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-
-
-
 </head>
-<style>
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
-</style>
-  
 
 <body>
     <!-- Left Panel -->
@@ -60,20 +51,17 @@ table, th, td {
                     </li>
                     <h3 class="menu-title">UI elements</h3><!-- /.menu-title -->
                     <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>PRODUCTS</a>
-                        <ul class="sub-menu children active dropdown-menu">
-                            <li><i class="fa fa-puzzle-piece"></i><a href="productlist.php">product list</a></li>
-            
-                        </ul>
-                    </li>
-                    <li class="menu-item-has-children dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>AUCTIONED PRODUCTS</a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Components</a>
                         <ul class="sub-menu children dropdown-menu">
-                            <li><i class="fa fa-puzzle-piece"></i><a href=tables-basic.html">product list</a></li>
-                            
+                            <li><i class="fa fa-puzzle-piece"></i><a href="listrequest.php">List Of Requests</a></li>
                         </ul>
                     </li>
-                   
+                    <li class="menu-item-has-children active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Tables</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="tables-data.html">List Of Requests</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!-- /.navbar-collapse -->
         </nav>
@@ -225,45 +213,99 @@ table, th, td {
                     <div class="page-title">
                         <ol class="breadcrumb text-right">
                             <li><a href="#">Dashboard</a></li>
-                            <li><a href="#">UI Elements</a></li>
-                            <li class="active">PRODUCTS</li>
+                            <li><a href="#">Table</a></li>
+                            <li class="active">Requests</li>
                         </ol>
                     </div>
                 </div>
             </div>
         </div>
 
-       <!-- <div class="content mt-3">
+        <div class="content mt-3">
             <div class="animated fadeIn">
                 <div class="row">
 
-                    <div class="buttons">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <strong class="card-title">Data Table</strong>
+                            </div>
+                            <div class="card-body">
+                            <?php
+include "../controller/requestcontroller.php";
 
-                       
-                        <div class="col-md-6">
+$customerservices = new requestcontroller();
+$tab = $customerservices->listrequest();
 
-                            <div class="card">
-                                <table>
-                                    <tr>
-                                      <td rowspan="6", style="height: 200px"><img src="img_girl.jpg" alt="painting"></td>
-         
-                                      <td>category</td>
-                                      <td>price</td>
-                                      <td>description</td>
-                                    </tr>
-                                    <tr>
-                                      <td>painting</td>
-                                      <td>300dt</td>
-                                      <td>oil painting</td>
-                                    </tr>
-                                  </table>
-                            </div> -->
+// Check if a reqtype filter is set in the URL
+$reqtypeFilter = isset($_GET['reqtype']) ? $_GET['reqtype'] : '';
+
+// Check if a servicestatus filter is set in the URL
+$servicestatusFilter = isset($_GET['servicestatus']) ? $_GET['servicestatus'] : '';
+
+?>
+
+<center>
+    <h1>List of requests</h1>
+    <h2>
+        <a href="createrequest.php">Add Request</a>
+    </h2>
+    <form action="" method="GET">
+        <label for="reqtype">Filter by reqtype:</label>
+        <select name="reqtype" id="reqtype">
+            <option value="">All</option>
+            <option value="refund" <?= ($reqtypeFilter === 'refund') ? 'selected' : ''; ?>>Refund</option>
+            <option value="feedback" <?= ($reqtypeFilter === 'feedback') ? 'selected' : ''; ?>>Feedback</option>
+        </select>
+
+        <label for="servicestatus">Filter by servicestatus:</label>
+        <select name="servicestatus" id="servicestatus">
+            <option value="">All</option>
+            <option value="completed" <?= ($servicestatusFilter === 'completed') ? 'selected' : ''; ?>>Completed</option>
+            <option value="ongoing" <?= ($servicestatusFilter === 'ongoing') ? 'selected' : ''; ?>>Ongoing</option>
+            <option value="cancelled" <?= ($servicestatusFilter === 'cancelled') ? 'selected' : ''; ?>>Cancelled</option>
+        </select>
+
+        <input type="submit" value="Apply Filter">
+    </form>
+</center>
+
+<table border="1" align="center" width="70%">
+    <tr>
+        <th>userid</th>
+        <th>reqtype</th>
+        <th>reqdate</th>
+        <th>servicestatus</th>
+    </tr>
+
+    <?php
+    foreach ($tab as $customerservice) {
+        // Apply the reqtype and servicestatus filters
+        if (
+            ($reqtypeFilter === '' || $customerservice['reqtype'] === $reqtypeFilter) &&
+            ($servicestatusFilter === '' || $customerservice['servicestatus'] === $servicestatusFilter)
+        ) {
+    ?>
+            <tr>
+                <td><?= $customerservice['userid']; ?></td>
+                <td><?= $customerservice['reqtype']; ?></td>
+                <td><?= $customerservice['reqdate']; ?></td>
+                <td><?= $customerservice['servicestatus']; ?></td>
+
+            </tr>
+    <?php
+        }
+    }
+    ?>
+</table>
+                            </div>
+                        </div>
+                    </div>
 
 
-                            <div class="card">
+                    <div class="card">
                                 <div class="card-body">
-                                    <a class="btn btn-primary" href="addproduct.php" role="button">add product</a>
-                                    <a class="btn btn-primary" href="displayproduct.php" role="button">view product</a>
+                                    <a class="btn btn-primary" href="tables-data.php" role="button">view Requests</a>
                                     
                                     
                                 </div>
@@ -271,56 +313,38 @@ table, th, td {
 
                                
                             </div>
-                            
-                          
-                           
-                            <div class="col-md-6">
-
-                                <div class="card">
-                                    <div class="card-header">
-                                        <strong>CATEGORY </strong>
-                                    </div>
-                                    <div class="card-body">
-                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
-                                        <a href="../../Back_Template\view\displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
-                                    </div>
-                                </div>
-
-                            </div> <!-- .buttons -->
-                            <div class="card">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
- 
-                                </div>
-                                
-
-                               
-                            </div>
-                            <div class="heading">
-      <h4>List of Products
-        <form class="filterForm" method="POST" action="sort.php">
-          <input type="text" id="filter" name="filter" autofocus="true" placeholder="filter keyword" tabindex="0" value="<?= $filter ?? '' ?>"/>
-          <input type="submit" name="btnFilter" id="btnFilter" value="Go"/>
-          <input type="submit" name="btnClear" id="btnClear" value="Clear Filters"/>
-        </form>
-      </h4>
-    </div>
-                        </div><!-- .row -->
-                    </div><!-- .animated -->
-                </div><!-- .content -->
 
 
-            </div><!-- /#right-panel -->
-           
-            <!-- Right Panel -->
-            
+                </div>
+            </div><!-- .animated -->
+        </div><!-- .content -->
 
-            <script src="vendors/jquery/dist/jquery.min.js"></script>
-            <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
-            <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
-            <script src="assets/js/main.js"></script>
+
+    </div><!-- /#right-panel -->
+
+    <!-- Right Panel -->
+
+
+    <script src="vendors/jquery/dist/jquery.min.js"></script>
+    <script src="vendors/popper.js/dist/umd/popper.min.js"></script>
+    <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
+
+    <script src="vendors/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="vendors/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="vendors/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="vendors/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+    <script src="vendors/jszip/dist/jszip.min.js"></script>
+    <script src="vendors/pdfmake/build/pdfmake.min.js"></script>
+    <script src="vendors/pdfmake/build/vfs_fonts.js"></script>
+    <script src="vendors/datatables.net-buttons/js/buttons.html5.min.js"></script>
+    <script src="vendors/datatables.net-buttons/js/buttons.print.min.js"></script>
+    <script src="vendors/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+    <script src="assets/js/init-scripts/data-table/datatables-init.js"></script>
 
 
 </body>
 
 </html>
+                    

@@ -1,3 +1,52 @@
+<?php
+require('db.php');
+//ini_set('display_errors', '1'); //for my server for development only
+@session_start();
+
+// $_POST['filter'] - for applying a filter and will be saved in a session
+// $_GET['sort'] - through querystring for sorting on a column
+
+//clear old filters
+if(isset($_POST['btnClear'])){
+  unset($_SESSION['filter']);
+}
+
+
+//retrieve the full product list
+$strSQL = "SELECT * FROM product ";
+$params = array();
+//check for and apply filter
+
+if(isset($_POST['filter'])  ){
+  //add the filter to the query and save in params
+  $filter = trim($_POST['filter']);
+  $strSQL .= " WHERE name LIKE ? ";
+  $params[] = '%' . $filter . '%';
+  $_SESSION['filter'] = $filter;
+}else{
+  if(isset($_SESSION['filter']) && strlen($_SESSION['filter'])>0 ){
+    //reapply old filter if user is just sorting
+    $filter = $_SESSION['filter'];
+    $strSQL .= " WHERE region LIKE ? ";
+    $params[] = '%' . $filter . '%';
+  }
+}
+
+//add the sort
+if(isset($_GET['sort']) && strlen(trim($_GET['sort'])) > 0){
+  //need to protect this because it is not a string being prepared...
+  $sort = addslashes(trim($_GET['sort']));
+  
+  $strSQL .= " ORDER BY $sort";
+}else{
+  //default sort
+
+}
+
+$prepared = $conn->prepare($strSQL);
+$prepared->execute($params);
+
+?>
 
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -39,7 +88,8 @@ table, th, td {
 </style>
   
 
-<body>
+<body class="<?= $sort ?? '' ?>">
+
     <!-- Left Panel -->
 
     <aside id="left-panel" class="left-panel">
@@ -296,7 +346,7 @@ table, th, td {
 
                                
                             </div>
-                            <div class="heading">
+                            <div class="card">
       <h4>List of Products
         <form class="filterForm" method="POST" action="sort.php">
           <input type="text" id="filter" name="filter" autofocus="true" placeholder="filter keyword" tabindex="0" value="<?= $filter ?? '' ?>"/>
@@ -305,13 +355,48 @@ table, th, td {
         </form>
       </h4>
     </div>
+    <div class="card">
+    <?php
+      //list of product names with links
+      //echo $prepared->debugDumpParams();
+      if($prepared->rowCount() > 0){
+        //table headers with links for sorting
+        echo '<table class="table">';
+        echo '<tr>';
+        echo '<th class="name"><a href="sort.php?sort=name">name</a></th>';
+        echo '<th class="price"><a href="sort.php?sort=price">price</a></th>';
+        echo '<th class="quantity"><a href="sort.php?sort=quantity">quantity</a></th>';
+        echo '<th class="category"><a href="sort.php?sort=category">category</a></th>';
+        echo '<th class="region"><a href="sort.php?sort=region">region</a></th>';
+        echo '<th class="description"><a href="sort.php?sort=description">description</a></th>';
+        echo '</tr>';
+        $prepared->setFetchMode(PDO::FETCH_ASSOC);
+        while($row= $prepared->fetch()){
+          echo '<tr data-ref="' . $row['id'] . '">';
+            echo '<td>' . $row['name'] . '</td>';
+            echo '<td>' . $row['price'] . '</td>';
+            echo '<td>' . $row['quantity'] . '</td>';
+            echo '<td>' . $row['category'] . '</td>';
+            echo '<td>' . $row['region'] . '</td>';
+            echo '<td>' . $row['description'] . '</td>';
+
+          echo '</tr>';
+        }
+        echo '</table>';
+      }else{
+        //no products
+        echo '<p>No products currently available.</p>';
+      }
+    ?>
+    </div>
+            
                         </div><!-- .row -->
                     </div><!-- .animated -->
                 </div><!-- .content -->
 
 
             </div><!-- /#right-panel -->
-           
+            
             <!-- Right Panel -->
             
 
@@ -320,7 +405,8 @@ table, th, td {
             <script src="vendors/bootstrap/dist/js/bootstrap.min.js"></script>
             <script src="assets/js/main.js"></script>
 
-
+            
 </body>
 
 </html>
+

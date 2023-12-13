@@ -1,6 +1,6 @@
 <?php
 
-require '../config.php';
+require '../../config.php';
 
 class productC
 {
@@ -17,12 +17,12 @@ class productC
         }
     }
 
-    function deleteproduct($ide)
+    function deleteproduct($id)
     {
         $sql = "DELETE FROM product WHERE id = :id";
         $db = config::getConnexion();
         $req = $db->prepare($sql);
-        $req->bindValue(':id', $ide);
+        $req->bindValue(':id', $id);
 
         try {
             $req->execute();
@@ -34,8 +34,8 @@ class productC
 
     function addproduct($product)
     {
-        $sql = "INSERT INTO product(id, name, price, quantity, category,region ,description)
-        VALUES (:id, :name, :price,:quantity, :category,:region ,:description)";
+        $sql = "INSERT INTO product( id,name, price, quantity, category,region ,description,img)
+        VALUES (:id, :name, :price,:quantity, :category,:region ,:description,:img)";
         $db = config::getConnexion();
         try {
             $query = $db->prepare($sql);
@@ -47,6 +47,7 @@ class productC
                 'category' =>$product->getcategory(),
                 'region' => $product->getregion(),
                 'description' =>$product->getdescription(),
+                'img' =>$product->getimg(),
             ]);
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
@@ -68,29 +69,31 @@ class productC
         }
     }
 
-    function updateproduct($product, $id)
+    function updateproduct($product,$id)
     {   
         try {
             $db = config::getConnexion();
             $query = $db->prepare(
                 'UPDATE product SET 
-                    name= :name, 
+                    name = :name, 
                     price = :price, 
                     quantity = :quantity, 
-                    category = :category
-                    region=:region;
-                    description=:description;
+                    category = :category,
+                    region =:region,
+                    description =:description,
+                    img=:img
                 WHERE id= :id'
             );
             
             $query->execute([
-                'id' => $id,
+                'id' => $id,  
                 'name' => $product->getname(),
                 'price' => $product->getprice(),
-                'quantity' => $product->geyquantity(),
+                'quantity' => $product->getquantity(),
                 'category' => $product->getcategory(),
                 'region' => $product->getregion(),
                 'description' => $product->getdescription(),
+                'img' =>$product->getimg(), 
             ]);
             
             echo $query->rowCount() . " records UPDATED successfully <br>";

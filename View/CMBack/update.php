@@ -1,11 +1,16 @@
 <?php
+
+
 include '../Controller/productcontrol.php';
 include '../model/product.php';
 $error = "";
+
     $id= $_GET['updateid'];
     // create an instance of the controller
     $productC = new productC();
     $product= $productC->showproduct($id);
+    
+    
     $valid=0;
     if (isset($_POST["name"]) &&
         isset($_POST["price"]) &&
@@ -21,26 +26,72 @@ $error = "";
             !empty($_POST["region"]) &&
             !empty($_POST["description"])
         ) {
-            
+            $img=$_FILES['file'];
+    
+            $imagefilename=$img['name'];
+            $imagefileerror=$img['error'];
+            $imagefiletemp=$img['tmp_name'];
+            $filename_seperate=explode('.',$imagefilename);
+            $file_extension=strtolower($filename_seperate[1]);
+            $extension=array('jpeg','jpg','png');
+            if(in_array($file_extension,$extension)){
+                $upload_image='uploads/'.$imagefilename;
+                move_uploaded_file($imagefiletemp,$upload_image);
                 $valid = 1; // Form validation passed
+            }
             
         } else{
             $error = "Missing information";
         }
     } 
     if ($valid==1){
+       
+        
         $product = new product(
-            $id,
             $_POST["name"], 
             $_POST["price"], 
             $_POST["quantity"], 
             $_POST["category"], 
             $_POST["region"], 
-            $_POST["description"]);
+            $_POST["description"],
+            $upload_image,
+        );
         $productC->updateproduct($product,$id);
-        header('Location:displayproduct.php');
+        header('Location:displayproduct.php'); 
+        
+        //var_dump($product);
+        
         exit;
+    }/*
+   if(isset($_POST['submit'])){
+    $name=$_POST['name'];
+    $price=$_POST['price'];
+    $quantity=$_POST['quantity'];
+    $category=$_POST['category'];
+    $region=$_POST['region'];
+    $description=$_POST['description'];
+    $img=$_FILES['file'];
+    
+    $imagefilename=$img['name'];
+    $imagefileerror=$img['error'];
+    $imagefiletemp=$img['tmp_name'];
+    $filename_seperate=explode('.',$imagefilename);
+    $file_extension=strtolower($filename_seperate[1]);
+    $extension=array('jpeg','jpg','png');
+    if(in_array($file_extension,$extension)){
+        $upload_image='uploads/'.$imagefilename;
+        move_uploaded_file($imagefiletemp,$upload_image);
+        $sql = "UPDATE `product` SET name=$name, price=$price, quantity=$quantity, category=$category, region=$region, description=$description, img=$img WHERE id=$id";
+        $pdo = config::getConnexion();
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        if($stmt){
+            header('Location:productlist.php');
+        }
     }
+
+
+}*/
 ?>
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang=""> <![endif]-->
@@ -276,45 +327,59 @@ table, th, td {
             </div>
         </div>
         <div class="container">
-        <form  method="post">
-<!-- Price Input -->
-    <label for="name">name:</label>
-<input type="text" id="name" name="name" value="<?php echo $product['name'] ;?>" >
+                                     <form  method="post" enctype="multipart/form-data">
+                                        <!-- Price Input -->
+                                            <label for="name">name:</label>
+                                        <input type="text" id="name" name="name" value="<?php echo $product['name']; ?>" >
 
-<br>
+                                        <br>
 
-<label for="price">Price:</label>
-<input type="number" id="price" name="price" value ="<?php echo $product['price'] ;?>" >
+                                        <label for="price">Price:</label>
+                                        <input type="number" id="price" name="price" value="<?php echo $product['price']; ?>" >
 
-<br>
+                                        <br>
 
-<!-- Quantity Input -->
-<label for="quantity">Quantity:</label>
-<input type="number" id="quantity" name="quantity" value="<?php echo $product['quantity'] ;?>">
+                                        <!-- Quantity Input -->
+                                        <label for="quantity">Quantity:</label>
+                                        <input type="number" id="quantity" name="quantity" value="<?php echo $product['quantity']; ?>">
 
-<br>
+                                        <br>
 
-<!-- Category Input -->
-<label for="category">Category:</label>
-<input type="text" id="category" name="category" value="<?php echo $product['category'] ;?>" >
+                                        <!-- Category Input -->
+                                        <label for="category">Category:</label>
+                                        <?php
+                                        $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+                                        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-<br>
+                                        $query = "SELECT * FROM category";
+                                        $result = $pdo->query($query);
+                                        $tab = $result->fetchAll();
+                                        ?>
+                                        <select id="category" name="category">
+                                        <option value="Category">Category</option>
+                                        <?php foreach ($tab as $category): ?>
+                                            <option value="<?php echo $category["catid"]; ?>"><?php echo $category["catname"]; ?></option>
+                                        <?php endforeach; ?>
+                                    </select>
 
-<!-- Region Input -->
-<label for="region">Region:</label>
-<input type="text" id="region" name="region" value="<?php echo $product['region'] ;?>" >
+                                    <br>
 
-<br>
-<label for="description">description:</label>
-<input type="text" id="description" name="description" value="<?php echo $product['description'] ;?>" >
+                                    <!-- Region Input -->
+                                    <label for="region">Region:</label>
+                                    <input type="text" id="region" name="region" value="<?php echo $product['region']; ?>">
 
-<br>
-
-
-<!-- Submit Button -->
-<input type="submit" value="update">
-</form>
-</div>
+                                    <br>
+                                    <label for="description">description:</label>
+                                    <input type="text" id="description" name="description" value="<?php echo $product['description']; ?>" >
+                                    <br>
+                                    <label>product picture</label>
+                                    <input type="file" name="file" class="form-control" required="" accept="*/image">
+                                    <br>
+        
+                                    <!-- Submit Button -->
+                                    <button type="submit" class ="btn btn-primary" name="submit">update </button>
+                                    </form>
+                                    </div>
        <!-- <div class="content mt-3">
             <div class="animated fadeIn">
                 <div class="row">
