@@ -1,6 +1,6 @@
 <?php
-include '../controller/Requestcontroller.php';
-include '../model/Request.php';
+include '../../Controller/Requestcontroller.php';
+include '../../Model/Request.php';
 $error = "";
     $userid= $_GET['updateuserid'];
     // create an instance of the controller
@@ -27,8 +27,8 @@ $error = "";
             $_POST["reqtype"], 
             $_POST["reqdate"], 
             $_POST["servicestatus"]);
-        $requestcontroller->updaterequest($request);
-        header('Location:tables-data.php');
+        $requestcontroller->updaterequest($customerservices);
+        header('Location:listrequest.php');
         exit();
     }
 ?>
@@ -270,7 +270,7 @@ table, th, td {
         <form  method="post">
 <!-- Price Input -->
 <td><label for="servicestatus">servicestatus Type:</label></td>
-<!--<input type="text" name="servicestatus" value="<?php echo $request['servicestatus']; ?>"><br>-->
+<!--<input type="text" name="servicestatus" value="<?php echo $customerservices['servicestatus']; ?>"><br>-->
 <select>
     <option value="ongoing">Ongoing</option>
     <option value="completed">Completed</option>

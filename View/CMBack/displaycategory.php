@@ -1,5 +1,5 @@
 <?php
-include '../../Back_Template/controller/categorycontrol.php';
+include '../../Controller/categorycontrol.php';
 $category = new categoryC();
 $tab = $category->listcategory();
 ?>
@@ -262,15 +262,19 @@ table, th, td {
                                     </tr>
                                   </table>
                             </div> -->
+                            <div class="card">
+                                <div class="card-body">
+                                    <a class="btn btn-primary" href="addproduct.php" role="button">add product</a>
+                                    <a class="btn btn-primary" href="displayproduct.php" role="button">view product</a>
+                                </div>
+                            </div>
 
 
                             <div class="card">
-                                <div class="card-body">
-                                    <a class="btn btn-primary" href="addcategory.php" role="button">add category</a>
-                                    <a class="btn btn-primary" href="displaycategory.php" role="button">view category</a>
-                                   
-                                    
-                                </div>
+                            <div class="card-body">
+                                        <a href="addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
+                                        <a href="../CMBack/delete.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
+                                    </div>
                                 
 
                                
@@ -302,7 +306,15 @@ table, th, td {
                                 ?>
                                 </tbody>
                             </table>
+                            <div class="card">
+                                <div class="card-body">
+                                    <a class="btn btn-primary" href="search_category.php" role="button">search category</a>
+ 
+                                </div>
+                                
 
+                               
+                            </div>
                           
                            
 

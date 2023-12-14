@@ -1,7 +1,7 @@
 <?php
 
-include '../model/category.php';
-include '../controller/categorycontrol.php';
+include '../../Model/category.php';
+include '../../Controller/categorycontrol.php';
 
 $error = "";
 $category = null;

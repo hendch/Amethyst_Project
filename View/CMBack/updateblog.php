@@ -1,6 +1,6 @@
 <?php
-include '../controller/blog.php';
-include '../model/blogM.php';
+include '../../Controller/blog.php';
+include '../../Model/blogM.php';
 $error = "";
     $blogid= $_GET['updateid'];
     // create an instance of the controller
@@ -30,7 +30,7 @@ $error = "";
             $_POST["blogid"], 
             $_POST["postcat"], 
             $_POST["blogtitle"], 
-            $_POST["descriptionb"];
+            $_POST["descriptionb"]);
         $blog->updateblog($blogM,$blogid);
         header('Location:listblog.php');
         exit;

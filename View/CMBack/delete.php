@@ -1,5 +1,5 @@
 <?php
-include '../controller/productcontrol.php';
+include '../../Controller/productcontrol.php';
 
 $product = new productC();
 $product->deleteproduct($_GET['deleteid']);

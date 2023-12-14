@@ -1,5 +1,5 @@
 <?php
-include '../controller/categorycontrol.php';
+include '../../Controller/categorycontrol.php';
 
 $category = new categoryC();
 $category->deletecategory($_GET['deletecatid']);

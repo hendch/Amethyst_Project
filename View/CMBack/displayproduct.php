@@ -1,5 +1,5 @@
 <?php
-include '../../Back_Template/controller/productcontrol.php';
+include '../../Controller/productcontrol.php';
 $c = new productC();
 $tab = $c->listproducts();
 ?>
@@ -42,9 +42,12 @@ $tab = $c->listproducts();
 </head>
 <style>
 table, th, td {
-    border: 1px solid black;
+    border: 1px solid white;
     border-collapse: collapse;
   }
+  tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
 </style>
   
 
@@ -278,7 +281,7 @@ table, th, td {
                             <?php
 $limit = 5;
 $query = "SELECT count(*) FROM product";
-$db = config::getConnexion();
+$db = Config::getConnexion();
 $s = $db->query($query);
 $total_results = $s->fetchColumn();
 $total_pages = ceil($total_results / $limit);

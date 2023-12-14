@@ -23,7 +23,7 @@
     } 
     if ($valid==1){
         $category = new category(
-            $catid,
+            
             $_POST["abbr"], 
             $_POST["catname"]);
         $categoryC->updatecategory($category);

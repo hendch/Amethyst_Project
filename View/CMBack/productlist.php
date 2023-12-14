@@ -65,6 +65,16 @@ table, th, td {
                             <li><i class="fa fa-puzzle-piece"></i><a href="productlist.php">product list</a></li>
             
                         </ul>
+                        <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Components</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-puzzle-piece"></i><a href="listrequest.php">List Of Requests</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Tables</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="tables-data.html">List Of Requests</a></li>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>AUCTIONED PRODUCTS</a>
@@ -281,8 +291,8 @@ table, th, td {
                                         <strong>CATEGORY </strong>
                                     </div>
                                     <div class="card-body">
-                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
-                                        <a href="../../Back_Template\view\displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
+                                        <a href="addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
+                                        <a href="displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
                                     </div>
                                 </div>
 

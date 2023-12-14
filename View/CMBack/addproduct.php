@@ -1,60 +1,9 @@
 <?php
 
-include '../model/product.php';
-include '../controller/productcontrol.php';
+include '../../Model/Product.php';
+include '../../Controller/productcontrol.php';
 
 
-/*$error = "";
-$product = null;
-$valid = 0;
-$productC = new productC();
-
-if (
-   
-    isset($_POST["name"]) &&
-        isset($_POST["price"]) &&
-        isset($_POST["quantity"]) &&
-        isset($_POST["category"]) &&
-        isset($_POST["region"]) &&
-        isset($_POST["description"]) &&
-        isset($_POST["img"]))
- {
-    if (
-        
-        !empty($_POST["name"]) &&
-            !empty($_POST["price"]) &&
-            !empty($_POST["quantity"]) &&
-            !empty($_POST["category"]) &&
-            !empty($_POST["region"]) &&
-            !empty($_POST["description"])&&
-            !empty($_POST["img"])
-    ) {
-       
-            $valid = 1; // Form validation passed
-       // }
-    }
-    else {
-        $error = "Missing information";
-    }
-}
-
-if ($valid == 1) {
-    // Form is valid, proceed with adding the user
-    $cat=(int)$_POST["category"];
-    $product = new product(
-        $_POST["name"], 
-        $_POST["price"], 
-        $_POST["quantity"], 
-        $cat, 
-        $_POST["region"], 
-        $_POST["description"],
-        $_POST["img"]
-    );
-    
-    $productC->addproduct($product);
-    header('Location:productlist.php');
-    exit;
-}*/
 if(isset($_POST['submit'])){
     $name=$_POST['name'];
     $price=$_POST['price'];
@@ -74,11 +23,12 @@ if(isset($_POST['submit'])){
         $upload_image='uploads/'.$imagefilename;
         move_uploaded_file($imagefiletemp,$upload_image);
         $sql="insert into `product` (name,price,quantity,category,region,description,img) values ('$name','$price','$quantity','$category','$region','$description','$upload_image')";
-        $pdo = config::getConnexion();
+        $pdo = Config::getConnexion();
         $stmt = $pdo->query($sql);
         $stmt->execute();
         if($stmt){
             header('Location:productlist.php');
+            exit();
         }
     }
 
@@ -154,6 +104,16 @@ table, th, td {
                             <li><i class="fa fa-puzzle-piece"></i><a href="productlist.php">product list</a></li>
             
                         </ul>
+                        <li class="menu-item-has-children dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-laptop"></i>Components</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-puzzle-piece"></i><a href="listrequest.php">List Of Requests</a></li>
+                        </ul>
+                    </li>
+                    <li class="menu-item-has-children active dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Tables</a>
+                        <ul class="sub-menu children dropdown-menu">
+                            <li><i class="fa fa-table"></i><a href="tables-data.html">List Of Requests</a></li>
                     </li>
                     <li class="menu-item-has-children dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>AUCTIONED PRODUCTS</a>
@@ -361,7 +321,7 @@ table, th, td {
                                
                             </div>
                             <div class="container">
-                                <form  method="post" enctype="multipart/form-data">
+                                <form  method="post" enctype="multipart/form-data" action="addproduct.php">
                                     <!-- name Input -->
                                     <label for="name">name:</label>
                                     <input type="text" id="name" name="name" placeholder="Enter name" required>
@@ -383,7 +343,7 @@ table, th, td {
                                     <label for="category">Category:</label>
                                     <input type="text" id="category" name="category" placeholder="Enter category" required> -->
                                     <?php
-                                        $pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
+                                        $pdo = new PDO('mysql:host=localhost;dbname=cmproject', 'root', '');
                                         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
                                         $query = "SELECT * FROM category";

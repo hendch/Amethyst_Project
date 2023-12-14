@@ -1,5 +1,5 @@
 <?php
-include '../controller/Requestcontroller.php';
+include '../../Controller/Requestcontroller.php';
 
 $requestcontroller = new requestcontroller();
 $requestcontroller->delete_request($_GET['deleteuserid']);

@@ -1,5 +1,5 @@
 <?php
-require_once "../controller/categorycontrol.php";
+require_once "../../Controller/categorycontrol.php";
 
 $categoryC = new categoryC();
 
@@ -295,8 +295,8 @@ table, th, td {
                                         <strong>CATEGORY </strong>
                                     </div>
                                     <div class="card-body">
-                                        <a href="../../Back_Template/view/addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
-                                        <a href="../../Back_Template\view\displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
+                                        <a href="addcategory.php"><button type="button" class="btn btn-outline-primary">add category</button></a>
+                                        <a href="displaycategory.php"><button type="button" class="btn btn-outline-secondary">view category</button></a>
                                     </div>
                                 </div>
 
