@@ -1,6 +1,6 @@
 <?php
 
-require '../config.php';
+require_once __DIR__ . '/../config.php';
 
 class blogs
 {
@@ -19,73 +19,84 @@ class blogs
 
     public function addblog($blog)
     {
-        $sql = "INSERT INTO blog(blogid,postcat,blogtitle,descriptionb)  
-        VALUES (:blogid,:postcat,:blogtitle,:descriptionb)";
+        $sql = "INSERT INTO blog (postcat, blogtitle, descriptionb) VALUES (:postcat, :blogtitle, :descriptionb)";
         $db = config::getConnexion();
+        
         try {
             $query = $db->prepare($sql);
             $query->execute([
-                'blogid' => $blog->getblogid(),
                 'postcat' => $blog->getpostcat(),
                 'blogtitle' => $blog->getblogtitle(),
-                'description' => $blog->getdescriptionb()
+                'descriptionb' => $blog->getdescriptionb()
             ]);
         } catch (Exception $e) {
             echo 'Error: ' . $e->getMessage();
         }
     }
-
+    
+    public function showblog($blogid)
+    {
+        $db = config::getConnexion();
+        $query = $db->prepare('SELECT * FROM blog WHERE blogid = :blogid');
+        $query->bindParam(':blogid', $blogid, PDO::PARAM_INT);
+        $query->execute();
+    
+        $blogData = $query->fetch(PDO::FETCH_ASSOC);
+    
+        if ($blogData) {
+            return new blog(
+                $blogData['blogid'],
+                $blogData['postcat'],
+                $blogData['blogtitle'],
+                $blogData['descriptionb']
+            );
+        } else {
+            return null;
+        }
+    }
+    
+    
 
     public function deleteblog($ide)
     {
-        $sql = "DELETE FROM blog WHERE id = :blogid";
+        $sql = "DELETE FROM blog WHERE blogid = :blogid";
         $db = config::getConnexion();
         $req = $db->prepare($sql);
-        $req->bindValue(':id', $ide);
-
+        $req->bindValue(':blogid', $ide, PDO::PARAM_INT);
+    
         try {
             $req->execute();
-        } catch (Exception $e) {
-            die('Error:' . $e->getMessage());
-        }
-    }
+    
 
-
-    public function showblog($id)
-    {
-        $sql = "SELECT * from blog where id = $id";
-        $db = config::getConnexion();
-        try {
-            $query = $db->prepare($sql);
-            $query->execute();
-            $blog = $query->fetch();
-            return $blog;
         } catch (Exception $e) {
             die('Error: ' . $e->getMessage());
         }
     }
-
-    function updateblog($blog, $id)
-    {   
+    
+    public function updateblog($blog, $blogid)
+    {
         try {
             $db = config::getConnexion();
             $query = $db->prepare(
-                'UPDATE blogs SET 
-                    userid = :userid, 
-                    blogid = :blogid, 
-                    postid = :postid, 
-                WHERE id= :blogid'
+                'UPDATE blog SET 
+                    postcat = :postcat, 
+                    blogtitle = :blogtitle, 
+                    descriptionb = :descriptionb 
+                 WHERE blogid = :blogid'
             );
-            
-            $query->execute([
-                'blogid' => $id,
-                'userid' => $blogs->getuserid(),
-                'postid' => $blogs->getposttid(),
-            ]);
-            
+    
+            $query->bindParam(':blogid', $blogid, PDO::PARAM_INT);
+            $query->bindParam(':postcat', $blog->getpostcat());
+            $query->bindParam(':blogtitle', $blog->getblogtitle());
+            $query->bindParam(':descriptionb', $blog->getdescriptionb());
+    
+            $query->execute();
+    
             echo $query->rowCount() . " records UPDATED successfully <br>";
         } catch (PDOException $e) {
-            $e->getMessage();
+            echo 'Error updating blog: ' . $e->getMessage();
         }
     }
+    
 }
+
