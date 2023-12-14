@@ -2,6 +2,7 @@
 session_start();
 include '../../Controller/ThreadController.php';
 include_once '../../Model/threadModel.php';
+
 $threadController = new ThreadController();
 $threadsPerPage = 5; // Adjust as needed
 $currentPage = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -132,7 +133,7 @@ https://templatemo.com/tm-577-liberty-market
             <ul class="nav">
               <li><a href="index.html">Home</a></li>
               <li><a href="explore.php" class="active">Explore</a></li>
-              <li><a href="details.html">Item Details</a></li>
+              <li><a href="products.php">Item Details</a></li>
               <li><a href="author.html">Author</a></li>
               <li><a href="request.php">Customer service</a></li>
             </ul>
@@ -146,6 +147,11 @@ https://templatemo.com/tm-577-liberty-market
     </div>
   </header>
   <!-- ***** Header Area End ***** -->
+  
+    
+  
+          
+        
 
   <div class="page-heading">
     <div class="container">

@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['user_id'] = $row['user_id'];
                 $_SESSION['username'] = $row['username'];
                 echo "Login successful!";
-                header('Location: createThread.php');
+                header('Location: index.html');
             } else {
                 echo "Invalid password.";
             }

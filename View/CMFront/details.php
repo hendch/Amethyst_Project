@@ -71,7 +71,7 @@ $comments = $postController->getComments($post_id);
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap"
     rel="stylesheet">
-  <title>Liberty Template - NFT Item Detail Page</title>
+  <title> Item Detail Page</title>
   <!-- Bootstrap core CSS -->
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Additional CSS Files -->
@@ -247,11 +247,11 @@ $comments = $postController->getComments($post_id);
             <!-- ***** Logo End ***** -->
             <!-- ***** Menu Start ***** -->
             <ul class="nav">
-              <li><a href="index.html">Home</a></li>
-              <li><a href="explore.php">Explore</a></li>
-              <li><a href="details.html" class="active">Item Details</a></li>
+            <li><a href="index.html">Home</a></li>
+              <li><a href="explore.php" class="active">Explore</a></li>
+              <li><a href="products.php">Item Details</a></li>
               <li><a href="author.html">Author</a></li>
-              <li><a href="create.html">Create Yours</a></li>
+              <li><a href="request.php">Customer service</a></li>
             </ul>
             <a class='menu-trigger'>
               <span>Menu</span>
