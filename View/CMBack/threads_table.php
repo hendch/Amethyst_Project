@@ -1,17 +1,17 @@
 <?php
-include "../../Controller/MYSTERYBOXController.php";
-$c = new MYSTERYBOXController();
-$tab = $c->display_MB();
+include "../../Controller/ThreadController.php"; // Include the ThreadController file
+$c = new ThreadController(); // Create an instance of the ThreadController
+$threads = $c->getAllThreads(0, 10, 'created_at'); // Fetch threads (adjust parameters as needed)
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'delete') {
-    // Check if the MB ID is set
-    if (isset($_POST['mysterybox_id'])) {
-        $c->deleteMYSTERYBOX($_POST['mysterybox_id']);
-        // Reload the MB list after deletion
-        $tab = $c->display_MB();
+    // Check if the thread ID is set
+    if (isset($_POST['thread_id'])) {
+        // Delete thread logic (implement this based on your requirements)
+        // $c->deleteThread($_POST['thread_id']); // Uncomment and implement this method in ThreadController
+        // Reload the threads list after deletion
+        // $threads = $c->getAllThreads(0, 10, 'created_at');
     }
 }
-
 ?>
 
 <!doctype html>
@@ -91,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                         <ul class="sub-menu children dropdown-menu">
                             <li><i class="fa fa-table"></i><a href="tables-basic.html">Basic Table</a></li>
                             <li><i class="fa fa-table"></i><a href="tables-data.php">mysterybox Table</a></li>
-                            <li><i class="fa fa-table"></i><a href="threads_table.php">threads Table</a></li>
+                            <li><i class="fa fa-table"></i><a href="threads_table.php">threads table</a></li>
                         </ul>
                     </li>
                     <li class="menu-item-has-children dropdown">
@@ -326,57 +326,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
                                 <table id="bootstrap-data-table-export" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
-                                            <th>Id</th>
-                                            <th>Name</th>
-                                            <th>Price</th>
-                                            <th>Items</th>
-                                            <th>Sold</th>
+                                            <th>ID</th>
+                                            <th>Title</th>
+                                            <th>User ID</th>
+                                            <th>Created At</th>
+                                            <th>Views</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-
-                                    <?php
-                                    foreach ($tab as $MB) {
-                                        ?>
-                                        <tr>
-                                            <td>
-                                                <?php echo $MB['id']; ?>
-                                            </td>
-                                            <td>
-                                                <?php echo $MB['name']; ?>
-                                            </td>
-                                            <td>
-                                                <?php echo $MB['price']; ?>
-                                            </td>
-                                            <td>
-                                                <?php echo $MB['items']; ?>
-                                            </td>
-                                            <td>
-                                                <?php echo $MB['sold']; ?>
-                                            </td>
-                                            <td>
-                                                <form method="post" action="">
-                                                    <input type="hidden" name="mysterybox_id"
-                                                        value="<?php echo $MB['id']; ?>">
-                                                    <input type="hidden" name="action" value="delete">
-                                                    <div class="row">
-                                                        <div class="col">
-                                                            <button type="submit" class="btn btn-danger"
-                                                                onclick="return confirm('Are you sure you want to delete this mystery box?');">Delete</button>
-                                                        </div>
-                                                        <!-- Optionally, add an Edit button for the mystery box -->
-                                                        <div class="col" style="margin-left: -5px;">
-                                                            <a href="editMysteryBox.php?mysterybox_id=<?php echo $MB['id']; ?>"
-                                                                class="btn btn-warning">Edit</a>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </td>
-
-                                        </tr>
-                                        <?php
-                                    }
-                                    ?>
+                                    <tbody>
+                                        <?php foreach ($threads as $thread) { ?>
+                                            <tr>
+                                                <td>
+                                                    <?php echo $thread['thread_id']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $thread['title']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $thread['user_id']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $thread['created_at']; ?>
+                                                </td>
+                                                <td>
+                                                    <?php echo $thread['views']; ?>
+                                                </td>
+                                                <td>
+                                                    <form method="post" action="">
+                                                        <input type="hidden" name="thread_id"
+                                                            value="<?php echo $thread['thread_id']; ?>">
+                                                        <input type="hidden" name="action" value="delete">
+                                                        <button type="submit" class="btn btn-danger"
+                                                            onclick="return confirm('Are you sure you want to delete this thread?');">Delete</button>
+                                                       
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
