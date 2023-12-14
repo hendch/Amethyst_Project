@@ -1,14 +1,14 @@
 <?php
 class blog
 {
-    private int $blogid;
+    private ?int $blogid;
     private string $postcat;
     private string $blogtitle;
     private string $descriptionb;
    
-    public function __construct(int $blogid, string $postcat, string $blogtitle, string $descriptionb)
+    public function __construct(?int $blogid, string $postcat, string $blogtitle, string $descriptionb)
     {
-        $this->blogid = null;
+        $this->blogid = $blogid;
         $this->postcat = $postcat;
         $this->blogtitle = $blogtitle;
         $this->descriptionb = $descriptionb;
