@@ -1,6 +1,6 @@
 <?php
 
-require '../../config.php';
+require 'Config.php';
 
 class productC
 {
@@ -8,7 +8,7 @@ class productC
     public function listproducts()
     {
         $sql = "SELECT * FROM product";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $liste = $db->query($sql);
             return $liste;
@@ -20,7 +20,7 @@ class productC
     function deleteproduct($id)
     {
         $sql = "DELETE FROM product WHERE id = :id";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         $req = $db->prepare($sql);
         $req->bindValue(':id', $id);
 
@@ -36,7 +36,7 @@ class productC
     {
         $sql = "INSERT INTO product( id,name, price, quantity, category,region ,description,img)
         VALUES (:id, :name, :price,:quantity, :category,:region ,:description,:img)";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
@@ -58,7 +58,7 @@ class productC
     function showproduct($id)
     {
         $sql = "SELECT * from product where id = $id";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute();
@@ -72,7 +72,7 @@ class productC
     function updateproduct($product,$id)
     {   
         try {
-            $db = config::getConnexion();
+            $db = Config::getConnexion();
             $query = $db->prepare(
                 'UPDATE product SET 
                     name = :name, 

@@ -1,12 +1,12 @@
 <?php
 
-require '../../config.php';
+require 'Config.php';
 
 class categoryC
 {
     public function listproducts($catid) {
         try {
-            $pdo = config::getConnexion();
+            $pdo = Config::getConnexion();
             $query = $pdo->prepare("SELECT * FROM product WHERE category = :id");
             $query->execute(['id' => $catid]);
             return $query->fetchAll();
@@ -17,7 +17,7 @@ class categoryC
     public function listcategory()
     {
         $sql = "SELECT * FROM category";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $liste = $db->query($sql);
             return $liste;
@@ -29,7 +29,7 @@ class categoryC
     function deletecategory($catid)
     {
         $sql = "DELETE FROM category WHERE catid = :catid";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         $req = $db->prepare($sql);
         $req->bindValue(':catid', $catid);
 
@@ -45,7 +45,7 @@ class categoryC
     {
         $sql = "INSERT INTO category( catid,abbr, catname)
         VALUES (:catid, :abbr, :catname)";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute([
@@ -62,7 +62,7 @@ class categoryC
     function showcategory($catid)
     {
         $sql = "SELECT * from category where catid = $catid";
-        $db = config::getConnexion();
+        $db = Config::getConnexion();
         try {
             $query = $db->prepare($sql);
             $query->execute();
@@ -76,7 +76,7 @@ class categoryC
     function updatecategory($category)
     {   
         try {
-            $db = config::getConnexion();
+            $db = Config::getConnexion();
             $query = $db->prepare(
                 'UPDATE category SET 
                     abbr = :abbr, 

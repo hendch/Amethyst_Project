@@ -1,11 +1,11 @@
 <?php
-require './Config.php';
+require '../Config.php';
 class UserController
 {
     public function listUser()
     {
-        $sql = "SELECT * FROM user";
-        $db = config::getConnexion();
+        $sql = "SELECT * FROM users";
+        $db = Config::getConnexion();
         try {
             $list = $db->query($sql);
             return $list;
@@ -16,8 +16,8 @@ class UserController
     public function addUser($user) {
     
 
-        $db = config::getConnexion(); 
-        $sql = "INSERT INTO user (fname, lname, age) VALUES (:fname, :lname, :age)";
+        $db = Config::getConnexion(); 
+        $sql = "INSERT INTO users (fname, lname, age) VALUES (:fname, :lname, :age)";
         error_log($user);
 
         try {
